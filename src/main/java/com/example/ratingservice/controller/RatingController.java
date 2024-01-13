@@ -2,7 +2,8 @@ package com.example.ratingservice.controller;
 
 import com.example.ratingservice.dto.RatingDTO;
 import com.example.ratingservice.model.Rating;
-import com.example.ratingservice.model.Roles;
+import com.example.ratingservice.model.Role;
+import com.example.ratingservice.service.RatingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,17 +23,13 @@ public class RatingController {
     }
 
     @GetMapping("{role}/{id}/all")
-    public ResponseEntity<List<Rating>> getRating(@PathVariable Roles role,@PathVariable int id) {
+    public ResponseEntity<List<Rating>> getRating(@PathVariable Role role, @PathVariable int id) {
         return ratingService.getRating(role, id);
     }
 
     @GetMapping("{role}/{id}")
-    public ResponseEntity<RatingDTO> getAverage(@PathVariable Roles role, @PathVariable int id) {
+    public ResponseEntity<RatingDTO> getAverage(@PathVariable Role role, @PathVariable int id) {
         return ratingService.getAverage(role, id);
     }
 
-    @GetMapping("evaluate")
-    public ResponseEntity<List<Rating>> evaluate() {
-        ratingService.evaluate();
-    }
 }

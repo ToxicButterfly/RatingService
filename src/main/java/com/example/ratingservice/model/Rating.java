@@ -14,8 +14,8 @@ public class Rating {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Enumerated(EnumType.STRING)
-    private Roles roles;
-    private Integer ride_id;
-    private Integer user_id;
+    private Role role;
+    private Integer rideId;
+    private Integer uid;
     private Float ratingScore;
 }
