@@ -10,7 +10,7 @@ spring:
     url: jdbc:postgresql://localhost:5432/ratingdb
   jpa:
     database: postgresql
-    show-sql: true
+    show-sql: false
     hibernate:
       ddl-auto: validate
     properties:
@@ -21,16 +21,11 @@ spring:
   kafka:
     consumer:
       properties:
-        spring:
-          deserializer:
-            value:
-              delegate:
-                class: org.springframework.kafka.support.serializer.JsonDeserializer
-          json:
-            trusted:
-              packages: "*"
+        spring.json:
+          trusted.packages: "*"
+          type.mapping: ratingDelegation:com.example.ratingservice.dto.DelegationFromRidesRequest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-    #  value-deserializer: org.springframework.kafka.support.serializer.ErrorHandlingDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       bootstrap-servers: localhost:9092
       group-id: ratingGroup
     producer:
@@ -53,6 +48,6 @@ feign:
       path: /api/v1/passenger
     driver:
       name: driver-service
-      url: http://localhost:8080
+      url: http://localhost:8085
       path: /api/v1/driver
 

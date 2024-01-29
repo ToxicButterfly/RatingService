@@ -10,6 +10,7 @@ import com.example.ratingservice.feign.PassengerFeignInterface;
 import com.example.ratingservice.model.Rating;
 import com.example.ratingservice.model.Role;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class RatingService {
 
@@ -52,7 +54,6 @@ public class RatingService {
     public void updateRating(DelegationFromRidesRequest request) {
         RatingResponse passengerResponse = passengerFeignInterface.askOpinion(request.getPassId()).getBody();
         RatingResponse driverResponse = driverFeignInterface.askOpinion(request.getDriverId()).getBody();
-
         Rating driverRating = Rating.builder()
                 .role(Role.valueOf("Driver"))
                 .rideId(request.getRideId())
@@ -66,12 +67,14 @@ public class RatingService {
                 .ratingScore(driverResponse.getRating().floatValue())
                 .build();
 
-        ratingDAO.save(driverRating);
-        ratingDAO.save(passengerRating);
+
         Float driverAverage = getNewAverage(Role.valueOf("Driver"), request.getDriverId());
         Float passengerAverage = getNewAverage(Role.valueOf("Passenger"), request.getPassId());
-        driverFeignInterface.updateRating(new UpdateRatingRequest(request.getDriverId(), driverAverage));
-        passengerFeignInterface.updateRating(new UpdateRatingRequest(request.getPassId(), passengerAverage));
+        driverFeignInterface.updateRating(new UpdateRatingRequest(driverAverage), request.getDriverId());
+        passengerFeignInterface.updateRating(new UpdateRatingRequest(passengerAverage), request.getPassId());
+        ratingDAO.save(driverRating);
+        ratingDAO.save(passengerRating);
+        log.info("Rating updated successfully!");
     }
 
     private Float getNewAverage(Role role, Integer id) {

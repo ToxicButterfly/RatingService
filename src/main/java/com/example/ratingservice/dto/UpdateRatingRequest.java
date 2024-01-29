@@ -8,6 +8,5 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateRatingRequest {
-    private Integer uId;
     private Float rating;
 }

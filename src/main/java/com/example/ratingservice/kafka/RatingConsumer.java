@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class RatingConsumer {
 
-    private RatingService ratingService;
+    private final RatingService ratingService;
 
     @KafkaListener(topics = "${topic.name.ride}")
     public void receiveMessage(DelegationFromRidesRequest request) {

@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient("DRIVER-SERVICE")
+@FeignClient(value = "${feign.client.driver.name}", path = "${feign.client.driver.path}", url = "${feign.client.driver.url}")
 public interface DriverFeignInterface {
 
-    @GetMapping("api/v1/driver/{id}/rating")
+    @GetMapping("{id}/rating")
     public ResponseEntity<RatingResponse> askOpinion(@PathVariable int id);
 
-    @PutMapping("api/v1/driver/{id}/rating")
-    public void updateRating(@RequestBody UpdateRatingRequest request);
+    @PutMapping("{id}/rating")
+    public void updateRating(@RequestBody UpdateRatingRequest request, @PathVariable Integer id);
 }
