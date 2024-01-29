@@ -1,10 +1,15 @@
 package com.example.ratingservice.service;
 
 import com.example.ratingservice.dao.RatingDAO;
+import com.example.ratingservice.dto.DelegationFromRidesRequest;
 import com.example.ratingservice.dto.RatingDTO;
+import com.example.ratingservice.dto.RatingResponse;
+import com.example.ratingservice.dto.UpdateRatingRequest;
+import com.example.ratingservice.feign.DriverFeignInterface;
+import com.example.ratingservice.feign.PassengerFeignInterface;
 import com.example.ratingservice.model.Rating;
 import com.example.ratingservice.model.Role;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -13,10 +18,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class RatingService {
 
-    @Autowired
-    RatingDAO ratingDAO;
+    final RatingDAO ratingDAO;
+    final PassengerFeignInterface passengerFeignInterface;
+    final DriverFeignInterface driverFeignInterface;
 
     public ResponseEntity<Rating> saveRating(Rating rating) {
         ratingDAO.save(rating);
@@ -40,5 +47,41 @@ public class RatingService {
         //TODO make UserNotFoundException
         List<Rating> ratings = dbResult.get();
         return new ResponseEntity<>(ratings, HttpStatus.OK);
+    }
+
+    public void updateRating(DelegationFromRidesRequest request) {
+        RatingResponse passengerResponse = passengerFeignInterface.askOpinion(request.getPassId()).getBody();
+        RatingResponse driverResponse = driverFeignInterface.askOpinion(request.getDriverId()).getBody();
+
+        Rating driverRating = Rating.builder()
+                .role(Role.valueOf("Driver"))
+                .rideId(request.getRideId())
+                .uid(request.getDriverId())
+                .ratingScore(passengerResponse.getRating().floatValue())
+                .build();
+        Rating passengerRating = Rating.builder()
+                .role(Role.valueOf("Passenger"))
+                .rideId(request.getRideId())
+                .uid(request.getPassId())
+                .ratingScore(driverResponse.getRating().floatValue())
+                .build();
+
+        ratingDAO.save(driverRating);
+        ratingDAO.save(passengerRating);
+        Float driverAverage = getNewAverage(Role.valueOf("Driver"), request.getDriverId());
+        Float passengerAverage = getNewAverage(Role.valueOf("Passenger"), request.getPassId());
+        driverFeignInterface.updateRating(new UpdateRatingRequest(request.getDriverId(), driverAverage));
+        passengerFeignInterface.updateRating(new UpdateRatingRequest(request.getPassId(), passengerAverage));
+    }
+
+    private Float getNewAverage(Role role, Integer id) {
+
+        List<Rating> allRatings = ratingDAO.findByRoleAndUid(role, id).get();
+        Float avg = 0F;
+        for (Rating rating: allRatings) {
+            avg += rating.getRatingScore();
+        }
+        avg = avg/allRatings.size();
+        return avg;
     }
 }
