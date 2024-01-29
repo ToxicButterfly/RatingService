@@ -6,7 +6,8 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class RatingDTO {
+public class RatingDto {
+
     private Role role;
     private Integer uid;
     private Float averageRating;

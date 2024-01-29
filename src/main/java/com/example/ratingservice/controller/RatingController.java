@@ -1,6 +1,6 @@
 package com.example.ratingservice.controller;
 
-import com.example.ratingservice.dto.RatingDTO;
+import com.example.ratingservice.dto.RatingDto;
 import com.example.ratingservice.model.Rating;
 import com.example.ratingservice.model.Role;
 import com.example.ratingservice.service.RatingService;
@@ -28,7 +28,7 @@ public class RatingController {
     }
 
     @GetMapping("{role}/{id}")
-    public ResponseEntity<RatingDTO> getAverage(@PathVariable Role role, @PathVariable int id) {
+    public ResponseEntity<RatingDto> getAverage(@PathVariable Role role, @PathVariable int id) {
         return ratingService.getAverage(role, id);
     }
 

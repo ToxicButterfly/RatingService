@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface RatingDAO extends JpaRepository<Rating, Integer> {
+public interface RatingRepo extends JpaRepository<Rating, Integer> {
     Optional<List<Rating>> findByRoleAndUid(Role role, Integer uid);
 }

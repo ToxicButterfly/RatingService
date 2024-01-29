@@ -3,8 +3,7 @@ package com.example.ratingservice.dto;
 import lombok.*;
 
 @Builder
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class RatingResponse {
