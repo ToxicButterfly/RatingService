@@ -1,4 +1,4 @@
-package com.example.ratingservice.dao;
+package com.example.ratingservice.repo;
 
 import com.example.ratingservice.model.Rating;
 import com.example.ratingservice.model.Role;
