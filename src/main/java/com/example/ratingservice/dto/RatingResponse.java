@@ -7,6 +7,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RatingResponse {
-
     private Integer Rating;
+
 }

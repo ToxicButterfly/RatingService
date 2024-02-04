@@ -10,4 +10,5 @@ public class DelegationFromRidesRequest {
     private Integer rideId;
     private Integer passId;
     private Integer driverId;
+
 }
