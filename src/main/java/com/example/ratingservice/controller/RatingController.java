@@ -26,12 +26,12 @@ public class RatingController {
     }
 
     @GetMapping("{role}/{id}/all")
-    public ResponseEntity<RatingsDto> getRating(@PathVariable Role role, @PathVariable int id) throws RatingNotFoundException {
+    public ResponseEntity<RatingsDto> getRating(@PathVariable Role role, @PathVariable int id) {
         return ResponseEntity.ok(ratingService.getRating(role, id));
     }
 
     @GetMapping("{role}/{id}")
-    public ResponseEntity<RatingDto> getAverage(@PathVariable Role role, @PathVariable int id) throws RatingNotFoundException {
+    public ResponseEntity<RatingDto> getAverage(@PathVariable Role role, @PathVariable int id) {
         return ResponseEntity.ok(ratingService.getAverage(role, id));
     }
 

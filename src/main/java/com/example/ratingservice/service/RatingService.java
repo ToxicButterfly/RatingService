@@ -10,7 +10,7 @@ import com.example.ratingservice.model.Role;
 public interface RatingService {
 
     Rating saveRating(Rating rating);
-    RatingDto getAverage(Role role, int id) throws RatingNotFoundException;
-    RatingsDto getRating(Role role, int id) throws RatingNotFoundException;
+    RatingDto getAverage(Role role, int id);
+    RatingsDto getRating(Role role, int id);
     void updateRating(DelegationFromRidesRequest request);
 }

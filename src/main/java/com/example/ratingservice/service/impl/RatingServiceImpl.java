@@ -9,6 +9,7 @@ import com.example.ratingservice.model.Rating;
 import com.example.ratingservice.model.Role;
 import com.example.ratingservice.service.RatingService;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +32,8 @@ public class RatingServiceImpl implements RatingService {
         return rating;
     }
 
-    public RatingDto getAverage(Role role, int id) throws RatingNotFoundException {
+    @SneakyThrows
+    public RatingDto getAverage(Role role, int id) {
         List<Rating> ratings = ratingRepo.findByRoleAndUid(role, id)
                 .orElseThrow(() -> new RatingNotFoundException("There's no records for such person"));
         Float sum = 0F;
@@ -41,7 +43,8 @@ public class RatingServiceImpl implements RatingService {
         return new RatingDto(role, id,sum/ratings.size());
     }
 
-    public RatingsDto getRating(Role role, int id) throws RatingNotFoundException {
+    @SneakyThrows
+    public RatingsDto getRating(Role role, int id) {
         List<Rating> ratings = ratingRepo.findByRoleAndUid(role, id)
                 .orElseThrow(() -> new RatingNotFoundException("There's no records for such person"));
         return new RatingsDto(ratings);
