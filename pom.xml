@@ -19,6 +19,7 @@
         <jackson.core.version>2.16.1</jackson.core.version>
         <jackson.databind.version>2.16.1</jackson.databind.version>
         <jackson.version>2.16.1</jackson.version>
+        <cucumber.version>7.14.0</cucumber.version>
     </properties>
     <dependencies>
 
@@ -74,6 +75,26 @@
             <groupId>org.springframework.kafka</groupId>
             <artifactId>spring-kafka-test</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-java</artifactId>
+            <version>${cucumber.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-junit</artifactId>
+            <version>${cucumber.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-spring</artifactId>
+            <version>${cucumber.version}</version>
         </dependency>
 
     </dependencies>
