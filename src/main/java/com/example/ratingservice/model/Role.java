@@ -1,6 +1,6 @@
 package com.example.ratingservice.model;
 
-public enum Roles {
+public enum Role {
     Passenger,
     Driver
 }
