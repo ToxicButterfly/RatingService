@@ -11,6 +11,7 @@ import com.example.ratingservice.service.RatingService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -51,9 +52,8 @@ public class RatingServiceImpl implements RatingService {
     }
 
     public void updateRating(DelegationFromRidesRequest request) {
-
-        RatingResponse passengerResponse = passengerFeignInterface.askOpinion(request.getPassId()).getBody();
-        RatingResponse driverResponse = driverFeignInterface.askOpinion(request.getDriverId()).getBody();
+        RatingResponse passengerResponse = passengerFeignInterface.askOpinion(request.getPassId(), request.getToken()).getBody();
+        RatingResponse driverResponse = driverFeignInterface.askOpinion(request.getDriverId(), request.getToken()).getBody();
 
         Rating driverRating = Rating.builder()
                 .role(Role.valueOf("Driver"))
@@ -70,8 +70,8 @@ public class RatingServiceImpl implements RatingService {
 
         Float driverAverage = getNewAverage(Role.valueOf("Driver"), request.getDriverId());
         Float passengerAverage = getNewAverage(Role.valueOf("Passenger"), request.getPassId());
-        driverFeignInterface.updateRating(new UpdateRatingRequest(driverAverage), request.getDriverId());
-        passengerFeignInterface.updateRating(new UpdateRatingRequest(passengerAverage), request.getPassId());
+        driverFeignInterface.updateRating(new UpdateRatingRequest(driverAverage), request.getDriverId(), request.getToken());
+        passengerFeignInterface.updateRating(new UpdateRatingRequest(passengerAverage), request.getPassId(), request.getToken());
         ratingRepo.save(driverRating);
         ratingRepo.save(passengerRating);
         log.info("Rating updated successfully!");

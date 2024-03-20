@@ -50,11 +50,11 @@ feign:
   client:
     passenger:
       name: passenger-service
-      url: http://passenger-service:8082
+      url: http://api-gateway:8765/PASSENGER-SERVICE
       path: /api/v1/passengers
     driver:
       name: driver-service
-      url: http://driver-service:8085
+      url: http://api-gateway:8765/DRIVER-SERVICE
       path: /api/v1/drivers
 eureka:
   client:
